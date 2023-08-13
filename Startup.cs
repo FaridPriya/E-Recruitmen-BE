@@ -1,4 +1,6 @@
-﻿using ERecruitmentBE.Data;
+﻿using AutoMapper;
+using ERecruitmentBE.Data;
+using ERecruitmentBE.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -25,6 +27,7 @@ namespace ERecruitmentBE
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             SetDatabaseContext(services);
+            SetAutoMapper(services);
 
             services.AddHealthChecks();
 
@@ -74,6 +77,16 @@ namespace ERecruitmentBE
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), opt =>
                     opt.CommandTimeout((int)TimeSpan.FromMinutes(3).TotalSeconds)));
+        }
+
+        private static void SetAutoMapper(IServiceCollection services)
+        {
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new GlobalMapping());
+            });
+            var mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         private static void SetJsonSerializerOptions(JsonOptions jsonOptions)

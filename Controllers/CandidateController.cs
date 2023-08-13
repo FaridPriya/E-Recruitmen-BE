@@ -56,6 +56,7 @@ namespace ERecruitmentBE.Controllers
             }
             catch(Exception e)
             {
+                await trx.RollbackAsync();
                 return BadRequest(e.Message);
             }
         }
@@ -85,6 +86,7 @@ namespace ERecruitmentBE.Controllers
             }
             catch (Exception e)
             {
+                await trx.RollbackAsync();
                 return BadRequest(e.Message);
             }
         }
@@ -109,6 +111,7 @@ namespace ERecruitmentBE.Controllers
             }
             catch (Exception e)
             {
+                await trx.RollbackAsync();
                 return BadRequest(e.Message);
             }
         }
