@@ -26,9 +26,17 @@ namespace ERecruitmentBE.Repo
                 .FirstOrDefaultAsync();
             return props;
         }
+
+        public async Task<ApplicantSpecification> GetApplicantSpecificationOnlyById(string id)
+        {
+            var props = await _db.ApplicantSpecifications.Where(a => !a.Deleted && a.Id == id)
+                .FirstOrDefaultAsync();
+            return props;
+        }
+
         public bool IsApplicantSpecificationAny(string name)
         {
-            return _db.ApplicantSpecifications.Any(a => a.Name.ToLower() == name.ToLower());
+            return _db.ApplicantSpecifications.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted);
         }
 
         public void InsertApplicantSpecification(ApplicantSpecification applicantSpecification)

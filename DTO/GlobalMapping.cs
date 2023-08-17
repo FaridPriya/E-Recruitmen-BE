@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ERecruitmentBE.DTO.ApplicantSpecification;
+using ERecruitmentBE.DTO.JobVacancys;
 
 namespace ERecruitmentBE.DTO
 {
@@ -9,6 +10,8 @@ namespace ERecruitmentBE.DTO
         {
             CreateMap<ApplicantSpecificationItemVM, Models.ApplicantSpecificationItem>();
             CreateMap<ApplicantSpecificationVM, Models.ApplicantSpecification>();
+            CreateMap<JobVacancyVM, Models.JobVacancy>();
+            CreateMap<RequirementVM, Models.Requirement>();
         }
     }
 }

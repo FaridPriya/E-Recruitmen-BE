@@ -14,6 +14,8 @@ namespace ERecruitmentBE.Data
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<ApplicantSpecification> ApplicantSpecifications { get; set; }
         public DbSet<ApplicantSpecificationItem> ApplicantSpecificationItems { get; set; }
+        public DbSet<Requirement> Requirements { get; set; }
+        public DbSet<JobVacancy> JobVacancys { get; set; }
         public Task<int> SaveChangesAsync()
         {
             SaveChangesHelper();
