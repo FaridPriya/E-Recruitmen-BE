@@ -11,4 +11,11 @@
         NotPassed = 2,
         rejected = 3
     }
+
+    public enum CV_SCREENING_AI_STATUS
+    {
+        Pending = 0,
+        Done = 1,
+        Fail =2
+    }
 }
