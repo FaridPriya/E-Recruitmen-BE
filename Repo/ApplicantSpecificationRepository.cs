@@ -34,6 +34,13 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<List<ApplicantSpecificationItem>> GetApplicantSpecificationItemByApplicantId(List<string> applicantId)
+        {
+            var props = await _db.ApplicantSpecificationItems.Where(a => !a.Deleted && applicantId.Contains(a.ApplicantSpecificationId))
+                .ToListAsync();
+            return props;
+        }
+
         public bool IsApplicantSpecificationAny(string name)
         {
             return _db.ApplicantSpecifications.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted);

@@ -21,6 +21,11 @@ namespace ERecruitmentBE.Repo
         {
             _db.Candidates.Add(candidate);
         }
+
+        public void InsertCandidateSpecification(CandidateSpecification candidateSpecification)
+        {
+            _db.CandidateSpecifications.Add(candidateSpecification);
+        }
         public void UpdateCandidate(Candidate candidate)
         {
             _db.Entry(candidate).State = EntityState.Modified;

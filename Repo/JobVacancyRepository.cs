@@ -25,6 +25,13 @@ namespace ERecruitmentBE.Repo
                 .FirstOrDefaultAsync();
             return props;
         }
+
+        public async Task<List<Requirement>> GetListRequirementJobVacancy(string jobVacancyId)
+        {
+            var props = await _db.Requirements.Where(a => !a.Deleted && a.JobVacancyId == jobVacancyId)
+                .ToListAsync();
+            return props;
+        }
         public bool IsJobVacancyAny(string name)
         {
             return _db.JobVacancys.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted);
