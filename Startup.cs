@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using ERecruitmentBE.Data;
 using ERecruitmentBE.DTO;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
 using System.Text.Json.Serialization;
 
 namespace ERecruitmentBE
@@ -28,11 +32,45 @@ namespace ERecruitmentBE
 
             SetDatabaseContext(services);
             SetAutoMapper(services);
+            SetJwt(services);
 
             services.AddHealthChecks();
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "E- Recruitmen", Version = "v1" });
+
+                // Konfigurasi autentikasi Bearer Token
+                var securityScheme = new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Masukkan token Bearer JWT di sini",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                };
+                c.AddSecurityDefinition("Bearer", securityScheme);
+                var securityRequirement = new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
+                    }
+                };
+                c.AddSecurityRequirement(securityRequirement);
+
+                // Ini adalah contoh jika Anda ingin menggunakan atribut Authorize di action controller
+                // c.EnableAnnotations();
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +93,10 @@ namespace ERecruitmentBE
 
             app.UseCookiePolicy();
 
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
@@ -68,7 +110,6 @@ namespace ERecruitmentBE
             {
                 option.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
                 option.RoutePrefix = String.Empty;
-                option.DocumentTitle = "E-Recruitmen Engine";
             });
         }
 
@@ -87,6 +128,23 @@ namespace ERecruitmentBE
             });
             var mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
+        }
+
+        private static void SetJwt(IServiceCollection services)
+        {
+            var jwtKey = Encoding.ASCII.GetBytes("KunciRahasiaAndaDiSini");
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(jwtKey)
+                    };
+                });
         }
 
         private static void SetJsonSerializerOptions(JsonOptions jsonOptions)

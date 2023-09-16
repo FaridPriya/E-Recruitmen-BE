@@ -1,4 +1,5 @@
-﻿using ERecruitmentBE.Data;
+﻿using Azure.Core;
+using ERecruitmentBE.Data;
 using ERecruitmentBE.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -48,6 +49,20 @@ namespace ERecruitmentBE.Repo
         public bool CheckUsernameIsAlready(string username)
         {
             return _db.Users.Any(u => u.Username == username);
+        }
+
+        public bool IsLogged(string username, string password)
+        {
+            var user =  _db.Users.Where(u => u.Username == username).FirstOrDefault();
+            if (user == null) return false;
+            var passwordHash = GeneratePasswordHash(password, user.Salt);
+
+            if (!StructuralComparisons.StructuralEqualityComparer.Equals(passwordHash, user.PasswordHash))
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void InsertUser(User user)

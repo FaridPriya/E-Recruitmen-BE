@@ -5,6 +5,7 @@ using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.DTO.JobVacancys;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -14,6 +15,7 @@ namespace ERecruitmentBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class JobVacancyController : ControllerBase
     {
         private readonly AppDbContext _db;

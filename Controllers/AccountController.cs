@@ -5,7 +5,10 @@ using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 
 namespace ERecruitmentBE.Controllers
 {
@@ -22,7 +25,7 @@ namespace ERecruitmentBE.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Post([FromBody] UserDTO request)
+        public async Task<IActionResult> register([FromBody] UserDTO request)
         {
             if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
             {
@@ -49,6 +52,50 @@ namespace ERecruitmentBE.Controllers
             catch (Exception e)
             {
                 await trx.RollbackAsync();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> login([FromBody] UserDTO request)
+        {
+            if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
+            {
+                return BadRequest("Username and Password must be fill");
+            }
+            
+            try
+            {
+                var userisAny = _userRepository.IsLogged(request.Username, request.Password);
+                if (userisAny)
+                {
+                    // Buat klaim pengguna
+                    var claims = new[]
+                    {
+                        new Claim(ClaimTypes.Name, request.Username)
+                        // Anda dapat menambahkan klaim lain yang diperlukan
+                    };
+
+                    // Buat token JWT
+                    var jwtKey = Encoding.ASCII.GetBytes("KunciRahasiaAndaDiSini");
+                    var tokenDescriptor = new SecurityTokenDescriptor
+                    {
+                        Subject = new ClaimsIdentity(claims),
+                        Expires = DateTime.UtcNow.AddDays(1),
+                        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(jwtKey), SecurityAlgorithms.HmacSha256Signature)
+                    };
+                    var tokenHandler = new JwtSecurityTokenHandler();
+                    var token = tokenHandler.CreateToken(tokenDescriptor);
+                    var tokenString = tokenHandler.WriteToken(token);
+                    return Ok(new { Token = tokenString });
+                }
+                else
+                {
+                    return Unauthorized("Username and password is wrong");
+                }
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
         }
