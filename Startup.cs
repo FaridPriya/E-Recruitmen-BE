@@ -36,6 +36,16 @@ namespace ERecruitmentBE
 
             services.AddHealthChecks();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder
+                        .WithOrigins("http://localhost:4200")
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials());
+            });
+
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {

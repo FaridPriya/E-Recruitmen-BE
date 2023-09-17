@@ -4,6 +4,7 @@ using ERecruitmentBE.DTO;
 using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
@@ -11,6 +12,7 @@ namespace ERecruitmentBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApplicantSpecificationController : ControllerBase
     {
         private readonly AppDbContext _db;
@@ -25,9 +27,17 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<ApplicantSpecificationController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                var data = _applicantSpecificationRepository.GetApplicantSpecificationDataTabel().ToList();
+                return Ok(data);
+
+            }catch(Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // GET: api/<ApplicantSpecificationController>/GetDataTable
@@ -90,6 +100,11 @@ namespace ERecruitmentBE.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ApplicantSpecificationVM applicantSpecificationVM)
         {
+            if (!applicantSpecificationVM.ListApplicantSpecificationsItem.Any())
+            {
+                return BadRequest("Specification List cannot empty");
+            }
+
             var isDuplicatedValue = applicantSpecificationVM.ListApplicantSpecificationsItem.GroupBy(a => a.Name)
                 .Select(a => new { a.Key, keyCount = a.Count() })
                 .Where(a => a.keyCount > 1).Any();
