@@ -195,6 +195,7 @@ namespace ERecruitmentBE.Controllers
             try
             {
                 applicantSpecification.Name = latestApplicant.Name;
+                applicantSpecification.Description = latestApplicant.Description;
                 applicantSpecification.Type = latestApplicant.Type;
                 _applicantSpecificationRepository.UpdateApplicantSpecification(applicantSpecification);
                 await _applicantSpecificationRepository.SaveAsync();
