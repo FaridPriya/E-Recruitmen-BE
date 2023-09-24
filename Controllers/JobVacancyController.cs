@@ -32,9 +32,10 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<JobVacancyController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            var model = _jobVacancyRepository.GetJobVacancyDataTabel().ToList();
+            return Ok(model);
         }
 
         // GET: api/<JobVacancyController>/GetDataTable
