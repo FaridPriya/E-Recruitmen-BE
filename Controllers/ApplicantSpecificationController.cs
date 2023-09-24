@@ -40,6 +40,21 @@ namespace ERecruitmentBE.Controllers
             }
         }
 
+        [HttpGet("AllWithItem")]
+        public async Task<IActionResult> GetAllWithItem()
+        {
+            try
+            {
+                var data = await _applicantSpecificationRepository.GetAllApplicantSpecificationWithItem();
+                return Ok(data);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
         // GET: api/<ApplicantSpecificationController>/GetDataTable
         [HttpPost("GetDataTable")]
         public IActionResult GetDataTable([FromBody] DataTabelParam dataTabelParam)
