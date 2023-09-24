@@ -18,4 +18,11 @@
         Done = 1,
         Fail =2
     }
+
+    public enum APPLICANT_SPECIFICATION_TYPE
+    {
+        Skill = 0,
+        Experience = 1,
+        Education = 2
+    }
 }

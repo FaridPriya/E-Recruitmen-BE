@@ -194,6 +194,8 @@ namespace ERecruitmentBE.Controllers
             await using var trx = await _db.Database.BeginTransactionAsync();
             try
             {
+                applicantSpecification.Name = latestApplicant.Name;
+                applicantSpecification.Type = latestApplicant.Type;
                 _applicantSpecificationRepository.UpdateApplicantSpecification(applicantSpecification);
                 await _applicantSpecificationRepository.SaveAsync();
                 await trx.CommitAsync();

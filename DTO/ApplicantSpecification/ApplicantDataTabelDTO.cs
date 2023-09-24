@@ -8,6 +8,7 @@ namespace ERecruitmentBE.DTO.ApplicantSpecification
         public string Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string? TypeName { get; set; }
         public int CountItem { get; set; }
         public List<ApplicantSpecificationItem> ListApplicantSpecificationsItem { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
@@ -20,6 +21,7 @@ namespace ERecruitmentBE.DTO.ApplicantSpecification
             Name = x.Name,
             Description = x.Description,
             Deleted = x.Deleted,
+            TypeName = x.Type.ToString(),
         };
     }
 }

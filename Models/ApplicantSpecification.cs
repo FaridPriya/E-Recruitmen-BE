@@ -1,4 +1,5 @@
-﻿using ERecruitmentBE.Interfaces;
+﻿using ERecruitmentBE.DTO;
+using ERecruitmentBE.Interfaces;
 
 namespace ERecruitmentBE.Models
 {
@@ -12,6 +13,7 @@ namespace ERecruitmentBE.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        public APPLICANT_SPECIFICATION_TYPE Type { get; set; }
         public List<ApplicantSpecificationItem> ListApplicantSpecificationsItem { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
