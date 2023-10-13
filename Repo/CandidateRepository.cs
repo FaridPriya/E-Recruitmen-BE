@@ -1,4 +1,5 @@
 ﻿using ERecruitmentBE.Data;
+using ERecruitmentBE.DTO.Candidate;
 using ERecruitmentBE.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,14 @@ namespace ERecruitmentBE.Repo
         public async Task<Candidate> GetCandidateById(string id)
         {
             var props = await _db.Candidates.Where(a => !a.Deleted && a.Id == id).FirstOrDefaultAsync();
+            return props;
+        }
+
+        public async Task<List<CandidateDTO>> GetAllCandidate()
+        {
+            var props = await _db.Candidates.Where(a => !a.Deleted)
+                .Select(CandidateDTO.SELECT)
+                .ToListAsync();
             return props;
         }
 

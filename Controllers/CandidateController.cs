@@ -1,32 +1,61 @@
-﻿using ERecruitmentBE.Data;
+﻿using AutoMapper;
+using ERecruitmentBE.Data;
+using ERecruitmentBE.DTO.Candidate;
+using ERecruitmentBE.DTO.JobVacancys;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ERecruitmentBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CandidateController : ControllerBase
     {
         private readonly AppDbContext _db;
         private readonly CandidateRepository _candidateRepository;
-        public CandidateController(AppDbContext db)
+        private readonly JobVacancyRepository _jobVacancyRepository;
+        private readonly IMapper _mapper;
+        public CandidateController(AppDbContext db, IMapper mapper)
         {
             _db = db;
             _candidateRepository = new CandidateRepository(db);
+            _jobVacancyRepository = new JobVacancyRepository(db);
+            _mapper = mapper;
         }
 
         // GET: api/<CandidateController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var listCandidate = await _candidateRepository.GetAllCandidate();
+            var listJob = new List<JobVacancyDTO>();
+            foreach(var candidate in listCandidate)
+            {
+                var selectedJob = listJob.FirstOrDefault(a => a.Id == candidate.IdJobVacancy);
+                if(selectedJob == null)
+                {
+                    var job = await _jobVacancyRepository.GetJobVacancyName(candidate.IdJobVacancy);
+                    if(job != null)
+                    {
+                        candidate.JobVacancyName = job.Name;
+                        listJob.Add(job);
+                    }
+                }
+                else
+                {
+                    candidate.JobVacancyName = selectedJob.Name;
+                }
+                
+            }
+            return Ok(listCandidate);
         }
 
         // GET api/<CandidateController>/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> GetbyId(string id)
         {
             try
             {
@@ -43,12 +72,16 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<CandidateController>
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Candidate candidate)
+        public async Task<IActionResult> Post([FromBody] CandidatePostDTO candidatePost)
         {
             await using var trx = await _db.Database.BeginTransactionAsync();
             try
             {
+                Candidate candidate = new Candidate();
+                candidate = _mapper.Map<Candidate>(candidatePost);
+
                 candidate.Status = DTO.STATUS_CANDIDATE.InProgress;
+                candidate.AIScreeningStatus = DTO.CV_SCREENING_AI_STATUS.Pending;
                 _candidateRepository.InsertCandidate(candidate);
                 await _candidateRepository.SaveAsync();
                 await trx.CommitAsync();

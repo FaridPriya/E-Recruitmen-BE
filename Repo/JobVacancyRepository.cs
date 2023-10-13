@@ -1,5 +1,6 @@
 ﻿using ERecruitmentBE.Data;
 using ERecruitmentBE.DTO.ApplicantSpecification;
+using ERecruitmentBE.DTO.JobVacancys;
 using ERecruitmentBE.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,6 +23,14 @@ namespace ERecruitmentBE.Repo
         {
             var props = await _db.JobVacancys.Where(a => !a.Deleted && a.Id == id)
                 .Include(a => a.ListRequirement)
+                .FirstOrDefaultAsync();
+            return props;
+        }
+
+        public async Task<JobVacancyDTO> GetJobVacancyName(string id)
+        {
+            var props = await _db.JobVacancys.Where(a => !a.Deleted && a.Id == id)
+                .Select(JobVacancyDTO.SELECT)
                 .FirstOrDefaultAsync();
             return props;
         }

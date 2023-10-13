@@ -4,6 +4,7 @@ using ERecruitmentBE.DTO;
 using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,6 +15,7 @@ namespace ERecruitmentBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [AllowAnonymous]
     public class AccountController : ControllerBase
     {
         private readonly AppDbContext _db;
@@ -25,6 +27,7 @@ namespace ERecruitmentBE.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<IActionResult> register([FromBody] UserDTO request)
         {
             if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
@@ -57,6 +60,7 @@ namespace ERecruitmentBE.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<IActionResult> login([FromBody] UserDTO request)
         {
             if (request == null || string.IsNullOrEmpty(request.Username) || string.IsNullOrEmpty(request.Password))
