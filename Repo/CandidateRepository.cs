@@ -18,6 +18,17 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<CandidateDTO> GetCandidateDTOById(string id)
+        {
+            var props = await _db.Candidates.Where(a => !a.Deleted && a.Id == id).Select(CandidateDTO.SELECT).FirstOrDefaultAsync();
+            return props;
+        }
+        public async Task<List<CandidateSpecification>> GetCandidateSpec(string id)
+        {
+            var props = await _db.CandidateSpecifications.Where(a => !a.Deleted && a.CandidateId == id).ToListAsync();
+            return props;
+        }
+
         public async Task<List<CandidateDTO>> GetAllCandidate()
         {
             var props = await _db.Candidates.Where(a => !a.Deleted)

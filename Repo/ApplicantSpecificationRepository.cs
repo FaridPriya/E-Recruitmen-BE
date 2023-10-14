@@ -27,6 +27,14 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<List<ApplicantSpecification>> GetApplicantSpecificationByListId(List<string> ids)
+        {
+            var props = await _db.ApplicantSpecifications.Where(a => !a.Deleted && ids.Contains(a.Id))
+                .Include(a => a.ListApplicantSpecificationsItem)
+                .ToListAsync();
+            return props;
+        }
+
         public async Task<List<ApplicantSpecification>> GetAllApplicantSpecificationWithItem()
         {
             var props = await _db.ApplicantSpecifications.Where(a => !a.Deleted)

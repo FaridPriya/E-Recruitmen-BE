@@ -21,6 +21,10 @@ namespace ERecruitmentBE.DTO.Candidate
         public DateTimeOffset? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
 
+        public List<CandidateSpecificationDTO> Skill { get; set; }
+        public List<CandidateSpecificationDTO> Experience { get; set; }
+        public List<CandidateSpecificationDTO> Education { get; set; }
+
         public static Expression<Func<Models.Candidate, CandidateDTO>> SELECT = x => new CandidateDTO
         {
             Id = x.Id,
