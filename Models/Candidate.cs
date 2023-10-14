@@ -15,6 +15,7 @@ namespace ERecruitmentBE.Models
         public string IdJobVacancy { get; set; }
         public string NoHandphone { get; set; }
         public string Email { get; set; }
+        public string? AIScreeningResult { get; set; }
         public CV_SCREENING_AI_STATUS AIScreeningStatus { get; set; }
         public int ApplicantSpecApprove { get; set; }
         public STATUS_CANDIDATE Status { get; set; }
