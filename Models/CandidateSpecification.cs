@@ -10,6 +10,7 @@ namespace ERecruitmentBE.Models
         }
         public string Id { get; set; }
         public string CandidateId { get; set; }
+        public string ApplicantId { get; set; }
         public string ApplicantItemId { get; set; }
         public string ApplicantItemName { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }

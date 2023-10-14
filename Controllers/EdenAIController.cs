@@ -78,7 +78,7 @@ namespace ERecruitmentBE.Controllers
                     }
                     else
                     {
-                        return BadRequest();
+                        candidate.AIScreeningStatus = DTO.CV_SCREENING_AI_STATUS.Fail;
                     }
                 }
 
@@ -91,6 +91,7 @@ namespace ERecruitmentBE.Controllers
                         {
                             var data = new CandidateSpecification()
                             {
+                                ApplicantId = spec.ApplicantSpecificationId,
                                 ApplicantItemId = spec.Id,
                                 ApplicantItemName = spec.Name,
                                 CandidateId = id
@@ -108,12 +109,9 @@ namespace ERecruitmentBE.Controllers
                         _candidateRepository.InsertCandidateSpecification(item);
                     }
 
-                    if (listCandidateSpecification.Any())
-                    {
-                        candidate.ApplicantSpecApprove = listCandidateSpecification.Count();
-                        _candidateRepository.UpdateCandidate(candidate);
-                    }
-                    
+                    candidate.ApplicantSpecApprove = listCandidateSpecification.Count();
+                    _candidateRepository.UpdateCandidate(candidate);
+
                     await _candidateRepository.SaveAsync();
                     await trx.CommitAsync();
                     return Ok();
