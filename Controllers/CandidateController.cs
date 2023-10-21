@@ -6,6 +6,7 @@ using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Threading.Tasks;
 
 namespace ERecruitmentBE.Controllers
@@ -65,6 +66,12 @@ namespace ERecruitmentBE.Controllers
                 var currentCandidate = await _candidateRepository.GetCandidateDTOById(id);
                 if (currentCandidate == null) throw new Exception("Candidate not Found");
 
+                if (!string.IsNullOrEmpty(currentCandidate.IdJobVacancy))
+                {
+                    var job = await _jobVacancyRepository.GetJobVacancyName(currentCandidate.IdJobVacancy);
+                    currentCandidate.JobVacancyName = job?.Name;
+                }
+
                 var listCandidateSpec = await _candidateRepository.GetCandidateSpec(currentCandidate.Id);
                 if (listCandidateSpec.Any())
                 {
@@ -79,18 +86,17 @@ namespace ERecruitmentBE.Controllers
                     {
                         foreach (var spec in skillSpec)
                         {
-                            var data = new CandidateSpecificationDTO()
-                            {
-                                ApplicantId = spec.Id,
-                                ApplicantName = spec.Name,
-                                ApplicantType = spec.Type
-                            };
-
                             foreach (var item in spec.ListApplicantSpecificationsItem)
                             {
-                                data.ApplicantItemId = item.Id;
-                                data.ApplicantItemName = item.Name;
-                                data.AiPassed = listApplicanItemtId.Contains(item.Id);
+                                var data = new CandidateSpecificationDTO()
+                                {
+                                    ApplicantId = spec.Id,
+                                    ApplicantName = spec.Name,
+                                    ApplicantType = spec.Type,
+                                    ApplicantItemId = item.Id,
+                                    ApplicantItemName = item.Name,
+                                    AiPassed = listApplicanItemtId.Contains(item.Id)
+                                };
 
                                 skill.Add(data);
                             }
@@ -103,18 +109,17 @@ namespace ERecruitmentBE.Controllers
                     {
                         foreach (var spec in eduSpec)
                         {
-                            var data = new CandidateSpecificationDTO()
-                            {
-                                ApplicantId = spec.Id,
-                                ApplicantName = spec.Name,
-                                ApplicantType = spec.Type
-                            };
-
                             foreach (var item in spec.ListApplicantSpecificationsItem)
                             {
-                                data.ApplicantItemId = item.Id;
-                                data.ApplicantItemName = item.Name;
-                                data.AiPassed = listApplicanItemtId.Contains(item.Id);
+                                var data = new CandidateSpecificationDTO()
+                                {
+                                    ApplicantId = spec.Id,
+                                    ApplicantName = spec.Name,
+                                    ApplicantType = spec.Type,
+                                    ApplicantItemId = item.Id,
+                                    ApplicantItemName = item.Name,
+                                    AiPassed = listApplicanItemtId.Contains(item.Id)
+                                };
 
                                 education.Add(data);
                             }
@@ -127,18 +132,17 @@ namespace ERecruitmentBE.Controllers
                     {
                         foreach (var spec in expSpec)
                         {
-                            var data = new CandidateSpecificationDTO()
-                            {
-                                ApplicantId = spec.Id,
-                                ApplicantName = spec.Name,
-                                ApplicantType = spec.Type
-                            };
-
                             foreach (var item in spec.ListApplicantSpecificationsItem)
                             {
-                                data.ApplicantItemId = item.Id;
-                                data.ApplicantItemName = item.Name;
-                                data.AiPassed = listApplicanItemtId.Contains(item.Id);
+                                var data = new CandidateSpecificationDTO()
+                                {
+                                    ApplicantId = spec.Id,
+                                    ApplicantName = spec.Name,
+                                    ApplicantType = spec.Type,
+                                    ApplicantItemId = item.Id,
+                                    ApplicantItemName = item.Name,
+                                    AiPassed = listApplicanItemtId.Contains(item.Id)
+                                };
 
                                 experience.Add(data);
                             }

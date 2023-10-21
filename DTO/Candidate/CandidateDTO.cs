@@ -15,6 +15,7 @@ namespace ERecruitmentBE.DTO.Candidate
         public string NoHandphone { get; set; }
         public string Email { get; set; }
         public CV_SCREENING_AI_STATUS AIScreeningStatus { get; set; }
+        public string? AIScreeningResult { get; set; }
         public int ApplicantSpecApprove { get; set; }
         public STATUS_CANDIDATE Status { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
@@ -31,9 +32,12 @@ namespace ERecruitmentBE.DTO.Candidate
             Name = x.Name,
             IdJobVacancy = x.IdJobVacancy,
             AIScreeningStatus = x.AIScreeningStatus,
+            AIScreeningResult = x.AIScreeningResult,
             Email = x.Email,
             NoHandphone = x.NoHandphone,
             Status = x.Status,
+            CreatedAt = x.CreatedAt,
+            UpdatedAt = x.UpdatedAt,
         };
     }
 }

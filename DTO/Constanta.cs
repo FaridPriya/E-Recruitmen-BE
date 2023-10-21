@@ -15,7 +15,7 @@
     public enum CV_SCREENING_AI_STATUS
     {
         Pending = 0,
-        Done = 1,
+        Success = 1,
         Fail =2
     }
 
