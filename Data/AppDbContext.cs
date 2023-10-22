@@ -18,6 +18,8 @@ namespace ERecruitmentBE.Data
         public DbSet<Requirement> Requirements { get; set; }
         public DbSet<JobVacancy> JobVacancys { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<PretestQuestion> PretestQuestions { get; set; }
+        public DbSet<PretestQuestionItem> PretestQuestionItems { get; set; }
         public Task<int> SaveChangesAsync()
         {
             SaveChangesHelper();

@@ -2,6 +2,7 @@
 using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.DTO.Candidate;
 using ERecruitmentBE.DTO.JobVacancys;
+using ERecruitmentBE.DTO.Pretest;
 
 namespace ERecruitmentBE.DTO
 {
@@ -10,6 +11,9 @@ namespace ERecruitmentBE.DTO
         public GlobalMapping()
         {
             CreateMap<ApplicantSpecificationItemVM, Models.ApplicantSpecificationItem>();
+            CreateMap<ApplicantSpecificationVM, Models.ApplicantSpecification>();
+            CreateMap<PretestPostDTO, Models.PretestQuestion>();
+            CreateMap<PretestQuestionItemPostDTO, Models.PretestQuestionItem>();
             CreateMap<ApplicantSpecificationVM, Models.ApplicantSpecification>();
             CreateMap<CandidatePostDTO, Models.Candidate>();
             CreateMap<JobVacancyVM, Models.JobVacancy>();
