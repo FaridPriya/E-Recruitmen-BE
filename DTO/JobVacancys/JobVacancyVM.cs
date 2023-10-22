@@ -6,6 +6,7 @@ namespace ERecruitmentBE.DTO.JobVacancys
     {
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string? PretestQuestionId { get; set; }
         public List<RequirementVM> ListRequirement { get; set; }
     }
 }

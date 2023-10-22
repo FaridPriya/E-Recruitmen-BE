@@ -13,6 +13,7 @@ namespace ERecruitmentBE.Models
         public string Id { get; set; }
         public string Name { get; set; }
         public string? Description { get; set; }
+        public string? PretestQuestionId { get; set; }
         public List<Requirement> ListRequirement { get; set; }
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }

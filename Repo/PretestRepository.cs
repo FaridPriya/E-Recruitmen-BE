@@ -19,6 +19,11 @@ namespace ERecruitmentBE.Repo
             return _db.PretestQuestions.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted);
         }
 
+        public bool IsPretestNameExistById(string id)
+        {
+            return _db.PretestQuestions.Any(a => a.Id.ToLower() == id.ToLower() && !a.Deleted);
+        }
+
         public bool IsPretestNameExist(string name, string id)
         {
             return _db.PretestQuestions.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted && a.Id != id);

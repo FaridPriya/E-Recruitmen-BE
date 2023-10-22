@@ -7,6 +7,7 @@ using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -21,12 +22,14 @@ namespace ERecruitmentBE.Controllers
         private readonly AppDbContext _db;
         private readonly JobVacancyRepository _jobVacancyRepository;
         private readonly ApplicantSpecificationRepository _applicantSpecificationRepository;
+        private readonly PretestRepository _pretestRepository;
         private readonly IMapper _mapper;
         public JobVacancyController(AppDbContext db, IMapper mapper)
         {
             _db = db;
             _applicantSpecificationRepository = new ApplicantSpecificationRepository(db);
             _jobVacancyRepository = new JobVacancyRepository(db);
+            _pretestRepository = new PretestRepository(db);
             _mapper = mapper;
         }
 
@@ -137,6 +140,15 @@ namespace ERecruitmentBE.Controllers
                 item.ApplicantSpecificationName = specification.Name;
             }
 
+            if (!string.IsNullOrEmpty(jobVacancy.PretestQuestionId))
+            {
+                var isPretestAny = _pretestRepository.IsPretestNameExistById(jobVacancy.PretestQuestionId);
+                if (!isPretestAny)
+                {
+                    return BadRequest($"Pre-test with id {jobVacancy.PretestQuestionId} not found");
+                }
+            }
+
             await using var trx = await _db.Database.BeginTransactionAsync();
             try
             {
@@ -176,6 +188,15 @@ namespace ERecruitmentBE.Controllers
                 return BadRequest("Data is not found");
             }
 
+            if (!string.IsNullOrEmpty(latestJob.PretestQuestionId))
+            {
+                var isPretestAny = _pretestRepository.IsPretestNameExistById(latestJob.PretestQuestionId);
+                if (!isPretestAny)
+                {
+                    return BadRequest($"Pre-test with id {jobVacancy.PretestQuestionId} not found");
+                }
+            }
+
             foreach (var item in jobVacancy.ListRequirement.ToList())
             {
                 var latestRequirement = latestJob.ListRequirement.FirstOrDefault(a => a.Id == item.Id);
@@ -203,6 +224,9 @@ namespace ERecruitmentBE.Controllers
             await using var trx = await _db.Database.BeginTransactionAsync();
             try
             {
+                jobVacancy.Name = latestJob.Name;
+                jobVacancy.Description = latestJob.Description;
+                jobVacancy.PretestQuestionId = latestJob.PretestQuestionId;
                 _jobVacancyRepository.UpdateJobVacancy(jobVacancy);
                 await _jobVacancyRepository.SaveAsync();
                 await trx.CommitAsync();
