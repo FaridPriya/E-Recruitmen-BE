@@ -4,6 +4,7 @@ using ERecruitmentBE.DTO.ApplicantSpecification;
 using ERecruitmentBE.DTO.Pretest;
 using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -11,6 +12,7 @@ namespace ERecruitmentBE.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PretestController : ControllerBase
     {
         private readonly AppDbContext _db;

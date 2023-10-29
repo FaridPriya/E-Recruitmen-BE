@@ -227,6 +227,7 @@ namespace ERecruitmentBE.Controllers
                 jobVacancy.Name = latestJob.Name;
                 jobVacancy.Description = latestJob.Description;
                 jobVacancy.PretestQuestionId = latestJob.PretestQuestionId;
+                jobVacancy.IsActive = latestJob.IsActive;
                 _jobVacancyRepository.UpdateJobVacancy(jobVacancy);
                 await _jobVacancyRepository.SaveAsync();
                 await trx.CommitAsync();
