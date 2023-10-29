@@ -21,6 +21,7 @@ namespace ERecruitmentBE.DTO.Candidate
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
+        public string? ApplyDate { get; set; }
 
         public List<CandidateSpecificationDTO> Skill { get; set; }
         public List<CandidateSpecificationDTO> Experience { get; set; }
@@ -37,7 +38,7 @@ namespace ERecruitmentBE.DTO.Candidate
             NoHandphone = x.NoHandphone,
             Status = x.Status,
             CreatedAt = x.CreatedAt,
-            UpdatedAt = x.UpdatedAt,
+            UpdatedAt = x.UpdatedAt
         };
     }
 }

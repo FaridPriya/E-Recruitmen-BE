@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ERecruitmentBE.Data;
+using ERecruitmentBE.DTO;
 using ERecruitmentBE.DTO.Candidate;
 using ERecruitmentBE.DTO.JobVacancys;
 using ERecruitmentBE.Models;
@@ -65,6 +66,9 @@ namespace ERecruitmentBE.Controllers
             {
                 var currentCandidate = await _candidateRepository.GetCandidateDTOById(id);
                 if (currentCandidate == null) throw new Exception("Candidate not Found");
+
+                if(currentCandidate.CreatedAt.HasValue)
+                    currentCandidate.ApplyDate = currentCandidate.CreatedAt.Value.ToString("dd MMM yyyy");
 
                 if (!string.IsNullOrEmpty(currentCandidate.IdJobVacancy))
                 {
@@ -210,6 +214,32 @@ namespace ERecruitmentBE.Controllers
                 await _candidateRepository.SaveAsync();
                 await trx.CommitAsync();
                 return Ok(candidate);
+            }
+            catch (Exception e)
+            {
+                await trx.RollbackAsync();
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPut("Status/{id}/{status}")]
+        public async Task<IActionResult> PutStatus(string id, STATUS_CANDIDATE status)
+        {
+            await using var trx = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                var currentCandidate = await _candidateRepository.GetCandidateById(id);
+                if (currentCandidate == null)
+                {
+                    throw new Exception("Candidate not Found");
+                }
+
+                currentCandidate.Status = status;
+
+                _candidateRepository.UpdateCandidate(currentCandidate);
+                await _candidateRepository.SaveAsync();
+                await trx.CommitAsync();
+                return Ok(currentCandidate);
             }
             catch (Exception e)
             {

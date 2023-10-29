@@ -8,7 +8,7 @@
     {
         InProgress = 0,
         Passed = 1,
-        NotPassed = 2,
+        Failed = 2,
         rejected = 3
     }
 
