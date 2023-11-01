@@ -65,6 +65,20 @@ namespace ERecruitmentBE.Repo
             return true;
         }
 
+        public bool IsLoggedCandidate(string username, string password)
+        {
+            var user = _db.Users.Where(u => u.Username == username && u.UserType == DTO.USER_TYPE.Candidate).FirstOrDefault();
+            if (user == null) return false;
+            var passwordHash = GeneratePasswordHash(password, user.Salt);
+
+            if (!StructuralComparisons.StructuralEqualityComparer.Equals(passwordHash, user.PasswordHash))
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public void InsertUser(User user)
         {
             _db.Users.Add(user);
