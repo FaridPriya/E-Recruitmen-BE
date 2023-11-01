@@ -1,4 +1,5 @@
 ﻿using ERecruitmentBE.Data;
+using ERecruitmentBE.DTO;
 using ERecruitmentBE.DTO.Candidate;
 using ERecruitmentBE.Models;
 using Microsoft.EntityFrameworkCore;
@@ -34,6 +35,13 @@ namespace ERecruitmentBE.Repo
             var props = await _db.Candidates.Where(a => !a.Deleted)
                 .Select(CandidateDTO.SELECT)
                 .ToListAsync();
+            return props;
+        }
+
+        public bool IsCandidateExist(RegisterCandidateDTO candidateReg)
+        {
+            var props = _db.Candidates.Where(a => !a.Deleted && a.Email.ToLower() == candidateReg.Email.ToLower() && a.IdJobVacancy.ToLower() == candidateReg.IdJobVacancy.ToLower()
+            && a.Name.ToLower() == candidateReg.Name.ToLower()).Any();
             return props;
         }
 

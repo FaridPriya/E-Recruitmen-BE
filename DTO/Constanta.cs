@@ -12,6 +12,12 @@
         rejected = 3
     }
 
+    public enum USER_TYPE
+    {
+        Admin = 0,
+        Candidate = 1
+    }
+
     public enum CV_SCREENING_AI_STATUS
     {
         Pending = 0,

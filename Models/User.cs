@@ -1,4 +1,5 @@
-﻿using ERecruitmentBE.Interfaces;
+﻿using ERecruitmentBE.DTO;
+using ERecruitmentBE.Interfaces;
 
 namespace ERecruitmentBE.Models
 {
@@ -15,5 +16,6 @@ namespace ERecruitmentBE.Models
         public DateTimeOffset? CreatedAt { get; set; }
         public DateTimeOffset? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
+        public USER_TYPE UserType { get; set; }
     }
 }

@@ -16,6 +16,7 @@ namespace ERecruitmentBE.DTO
             CreateMap<PretestQuestionItemPostDTO, Models.PretestQuestionItem>();
             CreateMap<ApplicantSpecificationVM, Models.ApplicantSpecification>();
             CreateMap<CandidatePostDTO, Models.Candidate>();
+            CreateMap<RegisterCandidateDTO, Models.Candidate>();
             CreateMap<JobVacancyVM, Models.JobVacancy>();
             CreateMap<RequirementVM, Models.Requirement>();
         }
