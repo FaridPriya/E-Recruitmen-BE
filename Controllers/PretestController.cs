@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ERecruitmentBE.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Pretest")]
     [ApiController]
     [Authorize]
     public class PretestController : ControllerBase
@@ -24,6 +24,21 @@ namespace ERecruitmentBE.Controllers
             _db = db;
             _pretestRepository = new PretestRepository(db);
             _mapper = mapper;
+        }
+
+        // GET: api/<PretestController>
+        [HttpGet("PretestItems")]
+        public async Task<IActionResult> GetPretestItem(string id, int skip)
+        {
+            try
+            {
+                var data = await _pretestRepository.GetPretestItem(id, skip);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // GET: api/<PretestController>

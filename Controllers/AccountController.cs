@@ -178,7 +178,7 @@ namespace ERecruitmentBE.Controllers
                     };
 
                     // Buat token JWT
-                    var jwtKey = Encoding.ASCII.GetBytes("FaridPriyaNugrahaPintar99");
+                    var jwtKey = Encoding.ASCII.GetBytes("FaridGantengSekali881123");
                     var tokenDescriptor = new SecurityTokenDescriptor
                     {
                         Subject = new ClaimsIdentity(claims),

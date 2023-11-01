@@ -45,6 +45,13 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<PretestQuestionItem> GetPretestItem(string id, int skip)
+        {
+            var props = await _db.PretestQuestionItems.Where(a => !a.Deleted && a.PretestQuestionId == id)
+                .Skip(skip).Take(1).FirstOrDefaultAsync();
+            return props;
+        }
+
         public void Insert(PretestQuestion pretestQuestion)
         {
             _db.PretestQuestions.Add(pretestQuestion);

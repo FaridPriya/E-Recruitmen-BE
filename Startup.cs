@@ -142,7 +142,7 @@ namespace ERecruitmentBE
 
         private static void SetJwt(IServiceCollection services)
         {
-            var jwtKey = Encoding.ASCII.GetBytes("KunciRahasiaAndaDiSini");
+            var jwtKey = Encoding.ASCII.GetBytes("FaridGantengSekali881123");
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
