@@ -19,6 +19,11 @@ namespace ERecruitmentBE.Repo
             return _db.PretestQuestions.Any(a => a.Name.ToLower() == name.ToLower() && !a.Deleted);
         }
 
+        public bool IsPretestAnswerExist(string candidateId, string pretestId, string pretestitemId)
+        {
+            return _db.PretestAnswers.Where(a => !a.Deleted && a.CandidateId == candidateId && a.PretestQuestionId == pretestId && a.PretestQuestionItemId == pretestitemId).Any();
+        }
+
         public bool IsPretestNameExistById(string id)
         {
             return _db.PretestQuestions.Any(a => a.Id.ToLower() == id.ToLower() && !a.Deleted);
@@ -52,9 +57,21 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public bool IsCandidateAlreadyAnswer(string candidateId)
+        {
+            var props = _db.PretestAnswers.Where(a => !a.Deleted && a.CandidateId == candidateId)
+                .Any();
+            return props;
+        }
+
         public void Insert(PretestQuestion pretestQuestion)
         {
             _db.PretestQuestions.Add(pretestQuestion);
+        }
+
+        public void InsertAnswer(PretestAnswer pretestAnswer)
+        {
+            _db.PretestAnswers.Add(pretestAnswer);
         }
 
         public void Update(PretestQuestion pretestQuestion)

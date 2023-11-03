@@ -3,6 +3,8 @@ using ERecruitmentBE.DTO;
 using ERecruitmentBE.DTO.Candidate;
 using ERecruitmentBE.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
+using static Azure.Core.HttpHeader;
 
 namespace ERecruitmentBE.Repo
 {
@@ -19,9 +21,23 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<Candidate> GetCandidateModelByToken(ClaimsIdentity claimsIdentity)
+        {
+            var candidateId = claimsIdentity.Claims.FirstOrDefault(a => a.Type == "CandidateId")?.Value ?? "";
+            var props = await _db.Candidates.Where(a => !a.Deleted && a.Id == candidateId).FirstOrDefaultAsync();
+            return props;
+        }
+
         public async Task<CandidateDTO> GetCandidateDTOById(string id)
         {
             var props = await _db.Candidates.Where(a => !a.Deleted && a.Id == id).Select(CandidateDTO.SELECT).FirstOrDefaultAsync();
+            return props;
+        }
+
+        public async Task<CandidateDTO> GetCandidateByToken(ClaimsIdentity claimsIdentity)
+        {
+            var candidateId = claimsIdentity.Claims.FirstOrDefault(a => a.Type == "CandidateId")?.Value ?? "";
+            var props = await _db.Candidates.Where(a => !a.Deleted && a.Id == candidateId).Select(CandidateDTO.SELECT_FOR_CANDIDATE).FirstOrDefaultAsync();
             return props;
         }
         public async Task<List<CandidateSpecification>> GetCandidateSpec(string id)

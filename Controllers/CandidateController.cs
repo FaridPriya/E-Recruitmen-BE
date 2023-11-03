@@ -8,6 +8,7 @@ using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace ERecruitmentBE.Controllers
@@ -33,6 +34,7 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<CandidateController>
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get()
         {
             var listCandidate = await _candidateRepository.GetAllCandidate();
@@ -56,6 +58,24 @@ namespace ERecruitmentBE.Controllers
                 
             }
             return Ok(listCandidate);
+        }
+
+        // GET api/<CandidateController>/5
+        [HttpGet("GetByCandidate")]
+        [Authorize(Roles = "Candidate")]
+        public async Task<IActionResult> GetByCandidate()
+        {
+            try
+            {
+                var currentCandidate = await _candidateRepository.GetCandidateByToken(User.Identity as ClaimsIdentity);
+                if (currentCandidate == null) throw new Exception("Candidate not Found");
+
+                return Ok(currentCandidate);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         // GET api/<CandidateController>/5

@@ -79,6 +79,12 @@ namespace ERecruitmentBE.Repo
             return true;
         }
 
+        public User GetUserByUsername(string username)
+        {
+            var user = _db.Users.Where(u => u.Username == username && u.UserType == DTO.USER_TYPE.Candidate).FirstOrDefault();
+            return user;
+        }
+
         public void InsertUser(User user)
         {
             _db.Users.Add(user);

@@ -7,6 +7,7 @@ using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Linq;
 
@@ -38,6 +39,14 @@ namespace ERecruitmentBE.Controllers
         public IActionResult Get()
         {
             var model = _jobVacancyRepository.GetJobVacancyDataTabel().ToList();
+            return Ok(model);
+        }
+
+        [HttpGet("ActiveJob")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetActiveJob()
+        {
+            var model = await _jobVacancyRepository.GetActiveJobVacancy().ToListAsync();
             return Ok(model);
         }
 

@@ -27,6 +27,21 @@ namespace ERecruitmentBE.Controllers
         }
 
         // GET: api/<PretestController>
+        [HttpGet("IsCandidateAnswer")]
+        public IActionResult GetPretestItem(string candidateId)
+        {
+            try
+            {
+                var data = _pretestRepository.IsCandidateAlreadyAnswer(candidateId);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // GET: api/<PretestController>
         [HttpGet("PretestItems")]
         public async Task<IActionResult> GetPretestItem(string id, int skip)
         {
@@ -106,6 +121,38 @@ namespace ERecruitmentBE.Controllers
             try
             {
                 _pretestRepository.Insert(pretest);
+                await _pretestRepository.SaveAsync();
+                await trx.CommitAsync();
+                return Ok(pretest);
+            }
+            catch (Exception e)
+            {
+                await trx.RollbackAsync();
+                return BadRequest(e.Message);
+            }
+        }
+
+        // POST api/<PretestController>
+        [HttpPost("Pretestanswer")]
+        public async Task<IActionResult> PostAnswer([FromBody] PretestAnswerPostDTO pretestPostDTO)
+        {
+            if (pretestPostDTO.Answer == null)
+            {
+                return BadRequest("Answer cannot empty");
+            }
+
+            var isDataAny = _pretestRepository.IsPretestAnswerExist(pretestPostDTO.CandidateId, pretestPostDTO.PretestQuestionId, pretestPostDTO.PretestQuestionItemId);
+            if (isDataAny)
+            {
+                return BadRequest("Answer is already exist !");
+            }
+
+            var pretest = _mapper.Map<PretestAnswer>(pretestPostDTO);
+
+            await using var trx = await _db.Database.BeginTransactionAsync();
+            try
+            {
+                _pretestRepository.InsertAnswer(pretest);
                 await _pretestRepository.SaveAsync();
                 await trx.CommitAsync();
                 return Ok(pretest);

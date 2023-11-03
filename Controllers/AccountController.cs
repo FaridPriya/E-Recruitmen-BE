@@ -128,7 +128,8 @@ namespace ERecruitmentBE.Controllers
                     // Buat klaim pengguna
                     var claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, request.Username)
+                        new Claim(ClaimTypes.Name, request.Username),
+                        new Claim(ClaimTypes.Role, USER_TYPE.Admin.ToString()),
                         // Anda dapat menambahkan klaim lain yang diperlukan
                     };
 
@@ -170,10 +171,14 @@ namespace ERecruitmentBE.Controllers
                 var userisAny = _userRepository.IsLoggedCandidate(request.Username, request.Password);
                 if (userisAny)
                 {
+                    var user = _userRepository.GetUserByUsername(request.Username);
+                    var candidate = await _candidateRepository.GetCandidateById(user.Id);
                     // Buat klaim pengguna
                     var claims = new[]
                     {
-                        new Claim(ClaimTypes.Name, request.Username)
+                        new Claim(ClaimTypes.Name, user.Username),
+                        new Claim(ClaimTypes.Role, USER_TYPE.Candidate.ToString()),
+                        new Claim("CandidateId", user.Id)
                         // Anda dapat menambahkan klaim lain yang diperlukan
                     };
 
@@ -188,7 +193,7 @@ namespace ERecruitmentBE.Controllers
                     var tokenHandler = new JwtSecurityTokenHandler();
                     var token = tokenHandler.CreateToken(tokenDescriptor);
                     var tokenString = tokenHandler.WriteToken(token);
-                    return Ok(new { Token = tokenString });
+                    return Ok(new { Token = tokenString, CandidateName = candidate.Name });
                 }
                 else
                 {

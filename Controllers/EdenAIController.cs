@@ -9,6 +9,7 @@ using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Text;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -35,7 +36,16 @@ namespace ERecruitmentBE.Controllers
         [HttpPost("ScreeningCV/{id}")]
         public async Task<IActionResult> ScreeningCV(string id, IFormFile pdfFile)
         {
-            var candidate = await _candidateRepository.GetCandidateById(id);
+            Candidate candidate;
+            if (id == null || id == "null")
+            {
+                candidate = await _candidateRepository.GetCandidateModelByToken(User.Identity as ClaimsIdentity);
+            }
+            else
+            {
+                candidate = await _candidateRepository.GetCandidateById(id);
+            }
+
             if (candidate == null)
                 return BadRequest("candidate not found");
 

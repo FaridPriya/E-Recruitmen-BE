@@ -20,6 +20,7 @@ namespace ERecruitmentBE.Data
         public DbSet<User> Users { get; set; }
         public DbSet<PretestQuestion> PretestQuestions { get; set; }
         public DbSet<PretestQuestionItem> PretestQuestionItems { get; set; }
+        public DbSet<PretestAnswer> PretestAnswers { get; set; }
         public Task<int> SaveChangesAsync()
         {
             SaveChangesHelper();

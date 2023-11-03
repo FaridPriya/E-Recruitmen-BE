@@ -22,6 +22,7 @@ namespace ERecruitmentBE.DTO.Candidate
         public DateTimeOffset? UpdatedAt { get; set; }
         public bool Deleted { get; set; }
         public string? ApplyDate { get; set; }
+        public bool IsAlreadyCVUpload { get; set; }
 
         public List<CandidateSpecificationDTO> Skill { get; set; }
         public List<CandidateSpecificationDTO> Experience { get; set; }
@@ -39,6 +40,15 @@ namespace ERecruitmentBE.DTO.Candidate
             Status = x.Status,
             CreatedAt = x.CreatedAt,
             UpdatedAt = x.UpdatedAt
+        };
+
+        public static Expression<Func<Models.Candidate, CandidateDTO>> SELECT_FOR_CANDIDATE = x => new CandidateDTO
+        {
+            Id = x.Id,
+            Name = x.Name,
+            IdJobVacancy = x.IdJobVacancy,
+            Status = x.Status,
+            IsAlreadyCVUpload = x.AIScreeningStatus != CV_SCREENING_AI_STATUS.Pending ? true: false,
         };
     }
 }

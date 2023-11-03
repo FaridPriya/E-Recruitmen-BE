@@ -19,6 +19,13 @@ namespace ERecruitmentBE.Repo
                 .AsQueryable();
             return props;
         }
+
+        public IQueryable<JobVacancy> GetActiveJobVacancy()
+        {
+            var props = _db.JobVacancys.Where(a => !a.Deleted && a.IsActive)
+                .AsQueryable();
+            return props;
+        }
         public async Task<JobVacancy> GetJobVacancyId(string id)
         {
             var props = await _db.JobVacancys.Where(a => !a.Deleted && a.Id == id)
