@@ -50,6 +50,7 @@ namespace ERecruitmentBE.Repo
         {
             var props = await _db.Candidates.Where(a => !a.Deleted)
                 .Select(CandidateDTO.SELECT)
+                .OrderByDescending(a=>a.CreatedAt)
                 .ToListAsync();
             return props;
         }

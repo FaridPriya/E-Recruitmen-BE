@@ -80,6 +80,7 @@ namespace ERecruitmentBE.Controllers
 
         // GET api/<CandidateController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetbyId(string id)
         {
             try
@@ -190,6 +191,7 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<CandidateController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] CandidatePostDTO candidatePost)
         {
             await using var trx = await _db.Database.BeginTransactionAsync();
@@ -214,6 +216,7 @@ namespace ERecruitmentBE.Controllers
 
         // PUT api/<CandidateController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(string id, [FromBody] Candidate candidate)
         {
             await using var trx = await _db.Database.BeginTransactionAsync();
@@ -243,6 +246,7 @@ namespace ERecruitmentBE.Controllers
         }
 
         [HttpPut("Status/{id}/{status}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutStatus(string id, STATUS_CANDIDATE status)
         {
             await using var trx = await _db.Database.BeginTransactionAsync();
@@ -270,6 +274,7 @@ namespace ERecruitmentBE.Controllers
 
         // DELETE api/<CandidateController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             await using var trx = await _db.Database.BeginTransactionAsync();

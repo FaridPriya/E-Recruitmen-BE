@@ -34,6 +34,13 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<JobVacancy> GetJobVacancyOnlyById(string id)
+        {
+            var props = await _db.JobVacancys.Where(a => !a.Deleted && a.Id == id)
+                .FirstOrDefaultAsync();
+            return props;
+        }
+
         public async Task<JobVacancyDTO> GetJobVacancyName(string id)
         {
             var props = await _db.JobVacancys.Where(a => !a.Deleted && a.Id == id)

@@ -178,7 +178,8 @@ namespace ERecruitmentBE.Controllers
                     {
                         new Claim(ClaimTypes.Name, user.Username),
                         new Claim(ClaimTypes.Role, USER_TYPE.Candidate.ToString()),
-                        new Claim("CandidateId", user.Id)
+                        new Claim("CandidateId", user.Id),
+                        new Claim("JobId", candidate.IdJobVacancy)
                         // Anda dapat menambahkan klaim lain yang diperlukan
                     };
 

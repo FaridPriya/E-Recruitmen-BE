@@ -6,7 +6,7 @@ using ERecruitmentBE.Models;
 using ERecruitmentBE.Repo;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 
 namespace ERecruitmentBE.Controllers
 {
@@ -17,22 +17,41 @@ namespace ERecruitmentBE.Controllers
     {
         private readonly AppDbContext _db;
         private readonly PretestRepository _pretestRepository;
+        private readonly JobVacancyRepository _jobVacancyRepository;
         private readonly IMapper _mapper;
 
         public PretestController(AppDbContext db, IMapper mapper)
         {
             _db = db;
             _pretestRepository = new PretestRepository(db);
+            _jobVacancyRepository = new JobVacancyRepository(db);
             _mapper = mapper;
         }
 
         // GET: api/<PretestController>
         [HttpGet("IsCandidateAnswer")]
-        public IActionResult GetPretestItem(string candidateId)
+        [Authorize(Roles = "Candidate")]
+        public IActionResult GetPretestItem()
         {
             try
             {
-                var data = _pretestRepository.IsCandidateAlreadyAnswer(candidateId);
+                var data = _pretestRepository.IsCandidateAlreadyAnswer(User.Identity as ClaimsIdentity);
+                return Ok(data);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        // GET: api/<PretestController>
+        [HttpGet("PretestCandidateAnswers/{id}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult GetPretestCandidateAnswers(string id)
+        {
+            try
+            {
+                var data = _pretestRepository.GetPretestAnswerCandidate(id);
                 return Ok(data);
             }
             catch (Exception e)
@@ -43,12 +62,19 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<PretestController>
         [HttpGet("PretestItems")]
-        public async Task<IActionResult> GetPretestItem(string id, int skip)
+        [Authorize(Roles = "Candidate")]
+        public async Task<IActionResult> GetPretestItem(int skip)
         {
             try
             {
-                var data = await _pretestRepository.GetPretestItem(id, skip);
-                return Ok(data);
+                var jobId = _pretestRepository.GetCandidateJobId(User.Identity as ClaimsIdentity);
+                var job = await _jobVacancyRepository.GetJobVacancyOnlyById(jobId);
+                if(job != null)
+                {
+                    var data = await _pretestRepository.GetPretestItem(job.PretestQuestionId, skip);
+                    return Ok(data);
+                }
+                return Ok();
             }
             catch (Exception e)
             {
@@ -134,6 +160,7 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<PretestController>
         [HttpPost("Pretestanswer")]
+        [Authorize(Roles = "Candidate")]
         public async Task<IActionResult> PostAnswer([FromBody] PretestAnswerPostDTO pretestPostDTO)
         {
             if (pretestPostDTO.Answer == null)
@@ -141,13 +168,15 @@ namespace ERecruitmentBE.Controllers
                 return BadRequest("Answer cannot empty");
             }
 
-            var isDataAny = _pretestRepository.IsPretestAnswerExist(pretestPostDTO.CandidateId, pretestPostDTO.PretestQuestionId, pretestPostDTO.PretestQuestionItemId);
+            var isDataAny = _pretestRepository.IsPretestAnswerExist(User.Identity as ClaimsIdentity, pretestPostDTO.PretestQuestionId, pretestPostDTO.PretestQuestionItemId);
             if (isDataAny)
             {
                 return BadRequest("Answer is already exist !");
             }
 
+            var candidateId = _pretestRepository.GetCandidateId(User.Identity as ClaimsIdentity);
             var pretest = _mapper.Map<PretestAnswer>(pretestPostDTO);
+            pretest.CandidateId = candidateId;
 
             await using var trx = await _db.Database.BeginTransactionAsync();
             try
