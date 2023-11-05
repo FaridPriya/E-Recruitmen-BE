@@ -119,7 +119,7 @@ namespace ERecruitmentBE
             app.UseSwaggerUI(option =>
             {
                 option.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
-                option.RoutePrefix = String.Empty;
+                option.RoutePrefix = "docs/v1";
             });
         }
 
