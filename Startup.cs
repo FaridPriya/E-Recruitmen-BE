@@ -40,7 +40,7 @@ namespace ERecruitmentBE
             {
                 options.AddPolicy("AllowSpecificOrigin",
                     builder => builder
-                        .WithOrigins("http://localhost:4200")
+                        .WithOrigins(Constanta.ListCorsAllowed)
                         .AllowAnyMethod()
                         .AllowAnyHeader()
                         .AllowCredentials());

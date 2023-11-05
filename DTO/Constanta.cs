@@ -2,6 +2,12 @@
 {
     public class Constanta
     {
+        public static readonly string[] ListCorsAllowed =
+       {
+            "http://localhost:4200",
+            "https://simplidots-erecruitment-admin.azurewebsites.net/",
+            "https://simplidots-erecruitment.azurewebsites.net/",
+        };
     }
 
     public enum STATUS_CANDIDATE
