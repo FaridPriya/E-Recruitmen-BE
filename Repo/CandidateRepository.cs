@@ -55,6 +55,15 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public async Task<List<CandidateDTO>> GetCandidateByTime(DateTimeOffset dateFrom, DateTimeOffset dateUntil)
+        {
+            var props = await _db.Candidates.Where(a => !a.Deleted && a.CreatedAt >= dateFrom && a.CreatedAt <= dateUntil)
+                .Select(CandidateDTO.SELECT)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToListAsync();
+            return props;
+        }
+
         public bool IsCandidateExist(RegisterCandidateDTO candidateReg)
         {
             var props = _db.Candidates.Where(a => !a.Deleted && a.Email.ToLower() == candidateReg.Email.ToLower() && a.IdJobVacancy.ToLower() == candidateReg.IdJobVacancy.ToLower()
