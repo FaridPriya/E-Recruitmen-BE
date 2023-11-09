@@ -63,10 +63,10 @@ namespace ERecruitmentBE.Controllers
             var listJobResume = new List<ResumeJobDTO>();
             foreach(var item in listJobActive)
             {
-                var pendingCount = listCandidateMounth.Where(a => a.Status == STATUS_CANDIDATE.InProgress && a.IdJobVacancy == item.Id).Count();
+                var candidateCount = listCandidateMounth.Where(a => a.IdJobVacancy == item.Id).Count();
+                var pendingCount = listCandidateMounth.Where(a => a.Status == STATUS_CANDIDATE.Pending && a.IdJobVacancy == item.Id).Count();
                 var failedCount = listCandidateMounth.Where(a => a.Status == STATUS_CANDIDATE.Failed && a.IdJobVacancy == item.Id).Count();
                 var passedCount = listCandidateMounth.Where(a => a.Status == STATUS_CANDIDATE.Passed && a.IdJobVacancy == item.Id).Count();
-                var rejectedCount = listCandidateMounth.Where(a => a.Status == STATUS_CANDIDATE.rejected && a.IdJobVacancy == item.Id).Count();
 
                 var job = new ResumeJobDTO()
                 {
@@ -75,7 +75,7 @@ namespace ERecruitmentBE.Controllers
                     CandidatePendingCount = pendingCount,
                     CandidateFailedCount = failedCount,
                     CandidatePassedCount = passedCount,
-                    CandidateRejectCount = rejectedCount
+                    CandidateCount = candidateCount
                 };
 
                 listJobResume.Add(job);

@@ -35,9 +35,18 @@ namespace ERecruitmentBE.Controllers
         // GET: api/<CandidateController>
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string? jobId, STATUS_CANDIDATE? status)
         {
-            var listCandidate = await _candidateRepository.GetAllCandidate();
+            var listCandidateQuery = _candidateRepository.GetCandidateForList();
+
+            if (!string.IsNullOrEmpty(jobId))
+                listCandidateQuery = listCandidateQuery.Where(a => a.IdJobVacancy == jobId).AsQueryable();
+
+            if (status != null)
+                listCandidateQuery = listCandidateQuery.Where(a => a.Status == status).AsQueryable();
+
+            var listCandidate = listCandidateQuery.ToList();
+
             var listJob = new List<JobVacancyDTO>();
             foreach(var candidate in listCandidate)
             {
@@ -200,7 +209,7 @@ namespace ERecruitmentBE.Controllers
                 Candidate candidate = new Candidate();
                 candidate = _mapper.Map<Candidate>(candidatePost);
 
-                candidate.Status = DTO.STATUS_CANDIDATE.InProgress;
+                candidate.Status = DTO.STATUS_CANDIDATE.Pending;
                 candidate.AIScreeningStatus = DTO.CV_SCREENING_AI_STATUS.Pending;
                 _candidateRepository.InsertCandidate(candidate);
                 await _candidateRepository.SaveAsync();

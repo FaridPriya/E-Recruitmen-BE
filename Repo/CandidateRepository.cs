@@ -55,6 +55,15 @@ namespace ERecruitmentBE.Repo
             return props;
         }
 
+        public IQueryable<CandidateDTO> GetCandidateForList()
+        {
+            var props = _db.Candidates.Where(a => !a.Deleted)
+                .Select(CandidateDTO.SELECT)
+                .OrderByDescending(a => a.CreatedAt)
+                .AsQueryable();
+            return props;
+        }
+
         public async Task<List<CandidateDTO>> GetCandidateByTime(DateTimeOffset dateFrom, DateTimeOffset dateUntil)
         {
             var props = await _db.Candidates.Where(a => !a.Deleted && a.CreatedAt >= dateFrom && a.CreatedAt <= dateUntil)

@@ -12,7 +12,7 @@
 
     public enum STATUS_CANDIDATE
     {
-        InProgress = 0,
+        Pending = 0,
         Passed = 1,
         Failed = 2,
         rejected = 3

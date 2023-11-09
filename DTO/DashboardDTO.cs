@@ -13,6 +13,7 @@
     {
         public string JobId { get; set; }
         public string JobName { get; set; }
+        public int CandidateCount { get; set; }
         public int CandidatePendingCount { get; set; }
         public int CandidateFailedCount { get; set; }
         public int CandidatePassedCount { get; set; }

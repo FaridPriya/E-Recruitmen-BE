@@ -96,7 +96,7 @@ namespace ERecruitmentBE.Controllers
                 Candidate candidate = new Candidate();
                 candidate = _mapper.Map<Candidate>(request);
                 candidate.Id = user.Id;
-                candidate.Status = DTO.STATUS_CANDIDATE.InProgress;
+                candidate.Status = DTO.STATUS_CANDIDATE.Pending;
                 candidate.AIScreeningStatus = DTO.CV_SCREENING_AI_STATUS.Pending;
                 _candidateRepository.InsertCandidate(candidate);
                 await _candidateRepository.SaveAsync();
