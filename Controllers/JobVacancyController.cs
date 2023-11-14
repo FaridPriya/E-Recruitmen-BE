@@ -110,13 +110,19 @@ namespace ERecruitmentBE.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] JobVacancyVM jobVacancyVM)
         {
+            if (!jobVacancyVM.ListRequirement.Any())
+                return BadRequest("Please fill requirement for a job vacancy");
+
+            if (string.IsNullOrEmpty(jobVacancyVM.PretestQuestionId))
+                return BadRequest("Please fill pretest question for a job vacancy");
+
             var isDuplicatedValue = jobVacancyVM.ListRequirement.GroupBy(a => a.ApplicantSpecificationId)
                 .Select(a => new { a.Key, keyCount = a.Count() })
                 .Where(a => a.keyCount > 1).Any();
 
             if (isDuplicatedValue)
             {
-                return BadRequest("Cannot input duplicated value !");
+                return BadRequest("Cannot input duplicated requirement value !");
             }
 
             var isDataAny = _jobVacancyRepository.IsJobVacancyAny(jobVacancyVM.Name);
@@ -181,6 +187,12 @@ namespace ERecruitmentBE.Controllers
             {
                 return BadRequest("Id Data is not same");
             }
+
+            if (!latestJob.ListRequirement.Any())
+                return BadRequest("Please fill requirement for a job vacancy");
+
+            if (string.IsNullOrEmpty(latestJob.PretestQuestionId))
+                return BadRequest("Please fill pretest question for a job vacancy");
 
             var isDuplicatedValue = latestJob.ListRequirement.GroupBy(a => a.ApplicantSpecificationId)
                .Select(a => new { a.Key, keyCount = a.Count() })
