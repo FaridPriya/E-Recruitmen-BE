@@ -153,6 +153,9 @@ namespace ERecruitmentBE.Controllers
             }
             catch (Exception e)
             {
+                if(e.Message.Contains("Timeout"))
+                    return BadRequest("Connection Time Out. Please Try Again");
+
                 return BadRequest(e.Message);
             }
         }
@@ -203,6 +206,9 @@ namespace ERecruitmentBE.Controllers
             }
             catch (Exception e)
             {
+                if (e.Message.Contains("Timeout"))
+                    return BadRequest("Connection Time Out. Please Try Again");
+
                 return BadRequest(e.Message);
             }
         }
