@@ -53,7 +53,7 @@ namespace ERecruitmentBE.Repo
 
         public bool IsLogged(string username, string password)
         {
-            var user =  _db.Users.Where(u => u.Username == username).FirstOrDefault();
+            var user =  _db.Users.Where(u => u.Username == username && u.UserType == DTO.USER_TYPE.Admin).FirstOrDefault();
             if (user == null) return false;
             var passwordHash = GeneratePasswordHash(password, user.Salt);
 

@@ -52,6 +52,7 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<JobVacancyController>/GetDataTable
         [HttpPost("GetDataTable")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetDataTable([FromBody] DataTabelParam dataTabelParam)
         {
             try
@@ -108,6 +109,7 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<JobVacancyController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] JobVacancyVM jobVacancyVM)
         {
             if (!jobVacancyVM.ListRequirement.Any())
@@ -181,6 +183,7 @@ namespace ERecruitmentBE.Controllers
 
         // PUT api/<JobVacancyController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(string id, [FromBody] JobVacancy latestJob)
         {
             if (id != latestJob.Id)
@@ -263,6 +266,7 @@ namespace ERecruitmentBE.Controllers
 
         // DELETE api/<JobVacancyController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var data = await _jobVacancyRepository.GetJobVacancyId(id);

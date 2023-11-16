@@ -111,6 +111,7 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<PretestController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] PretestPostDTO pretestPostDTO)
         {
             if (!pretestPostDTO.ListPretestQuestionItem.Any())
@@ -195,6 +196,7 @@ namespace ERecruitmentBE.Controllers
 
         // PUT api/<PretestController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(string id, [FromBody] PretestQuestion latestPretestQuestion)
         {
             if(id != latestPretestQuestion.Id)
@@ -262,6 +264,7 @@ namespace ERecruitmentBE.Controllers
 
         // DELETE api/<PretestController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var pretest = await _pretestRepository.GetPretestQuestionById(id);

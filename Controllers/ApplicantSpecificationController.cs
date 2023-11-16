@@ -57,6 +57,7 @@ namespace ERecruitmentBE.Controllers
 
         // GET: api/<ApplicantSpecificationController>/GetDataTable
         [HttpPost("GetDataTable")]
+        [Authorize(Roles = "Admin")]
         public IActionResult GetDataTable([FromBody] DataTabelParam dataTabelParam)
         {
             try
@@ -113,6 +114,7 @@ namespace ERecruitmentBE.Controllers
 
         // POST api/<ApplicantSpecificationController>
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Post([FromBody] ApplicantSpecificationVM applicantSpecificationVM)
         {
             if (!applicantSpecificationVM.ListApplicantSpecificationsItem.Any())
@@ -163,6 +165,7 @@ namespace ERecruitmentBE.Controllers
 
         // PUT api/<ApplicantSpecificationController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Put(string id, [FromBody] ApplicantSpecification latestApplicant)
         {
             if(id != latestApplicant.Id)
@@ -226,6 +229,7 @@ namespace ERecruitmentBE.Controllers
 
         // DELETE api/<ApplicantSpecificationController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             var applicantSpecification = await _applicantSpecificationRepository.GetApplicantSpecificationById(id);
